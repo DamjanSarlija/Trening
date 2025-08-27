@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="hr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Piramida Beskraja - Kalkulator</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #f4f4f9;
+      color: #333;
+      display: flex;
+      justify-content: center;
+      align-items: flex-start;
+      min-height: 100vh;
+      margin: 0;
+      padding: 10px;
+    }
+    .container {
+      background: white;
+      padding: 20px;
+      border-radius: 12px;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+      width: 100%;
+      max-width: 420px;
+    }
+    h1 {
+      text-align: center;
+      font-size: 1.4rem;
+      margin-bottom: 20px;
+    }
+    label {
+      display: block;
+      margin: 10px 0 5px;
+      font-weight: bold;
+      font-size: 0.95rem;
+    }
+    input[type="number"] {
+      width: 100%;
+      padding: 10px;
+      border-radius: 8px;
+      border: 1px solid #ccc;
+      margin-bottom: 15px;
+      font-size: 1rem;
+    }
+    input[type="checkbox"] {
+      margin-right: 8px;
+      transform: scale(1.2);
+    }
+    button {
+      width: 100%;
+      padding: 12px;
+      background: #0077cc;
+      color: white;
+      border: none;
+      border-radius: 8px;
+      font-size: 1.1rem;
+      cursor: pointer;
+      transition: background 0.3s;
+    }
+    button:hover {
+      background: #005fa3;
+    }
+    .result {
+      margin-top: 20px;
+      padding: 15px;
+      background: #f9fafc;
+      border: 1px solid #ddd;
+      border-radius: 8px;
+    }
+    .result p {
+      margin: 8px 0;
+      font-size: 1rem;
+    }
+
+    /* Responsive dizajn */
+    @media (max-width: 480px) {
+      h1 {
+        font-size: 1.2rem;
+      }
+      button {
+        font-size: 1rem;
+        padding: 10px;
+      }
+      .result p {
+        font-size: 0.95rem;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Piramida Beskraja - Kalkulator</h1>
+    <label for="n">Broj ponavljanja u seriji (pumpanje sklekova):</label>
+    <input type="number" id="n" min="1" value="10">
+
+    <label for="k">Maksimalni broj ponavljanja u piramidi (k):</label>
+    <input type="number" id="k" min="1" value="5">
+
+    <label>
+      <input type="checkbox" id="ponavljanje">
+      Ponavlja se najviši broj u piramidi
+    </label>
+
+    <button onclick="izracunaj()">Izračunaj</button>
+
+    <div class="result" id="rezultati" style="display:none;"></div>
+  </div>
+
+  <script>
+    function izracunaj() {
+      const n = parseInt(document.getElementById("n").value) || 0;
+      const k = parseInt(document.getElementById("k").value) || 0;
+      const ponavljanje = document.getElementById("ponavljanje").checked;
+
+      // Pumpanje sklekova
+      let pushPumpanje = 44 * n;
+
+      let pullPiramide = 0;
+      let pushPiramide = 0;
+
+      if (!ponavljanje) {
+        // bez ponavljanja vrha
+        pullPiramide = 12 * k * k;
+        pushPiramide = 5 * k * k;
+      } else {
+        // s ponavljanjem vrha
+        pullPiramide = 12 * (k * k + k);
+        pushPiramide = 5 * (k * k + k);
+      }
+
+      let ukupniPull = pullPiramide;
+      let ukupniPush = pushPumpanje + pushPiramide;
+
+      let omjer = ukupniPull / ukupniPush;
+      omjer = Math.round(omjer * 100) / 100; // 2 decimale
+
+      let rezultatiDiv = document.getElementById("rezultati");
+      rezultatiDiv.style.display = "block";
+      rezultatiDiv.innerHTML = `
+        <p><strong>Ukupni PUSH volumen:</strong> ${ukupniPush}</p>
+        <p><strong>Ukupni PULL volumen:</strong> ${ukupniPull}</p>
+        <p><strong>Pull/Push omjer:</strong> ${omjer}</p>
+      `;
+    }
+  </script>
+</body>
+</html>
